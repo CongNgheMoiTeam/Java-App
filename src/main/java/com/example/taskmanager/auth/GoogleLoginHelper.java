@@ -19,8 +19,8 @@ import java.nio.file.Files;
 import java.util.List;
 
 public class GoogleLoginHelper {
-    private static final String CLIENT_ID = "1052097121919-po95kbktq5bvids13930unprvonjrard.apps.googleusercontent.com";
-    private static final String CLIENT_SECRET = "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";
+    private static final String CLIENT_ID = "";
+    private static final String CLIENT_SECRET = "";
     private static final List<String> SCOPES = List.of(
             "https://www.googleapis.com/auth/userinfo.profile", 
             "https://www.googleapis.com/auth/userinfo.email");

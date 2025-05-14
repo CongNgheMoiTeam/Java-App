@@ -76,9 +76,9 @@ public class AuthService {
         return accessToken;
     }
     
-    public boolean login(String username, String password) {
-        return "admin".equals(username) && "1234".equals(password);
-    }
+    // public boolean login(String username, String password) {
+    //     return "admin".equals(username) && "1234".equals(password);
+    // }
     
     private boolean refreshAccessToken() {
         try {
@@ -125,11 +125,19 @@ public class AuthService {
     }
     
     private void processTokenResponse(JsonNode jsonNode) {
-        this.accessToken = jsonNode.get("refresh_token").asText();
-        this.refreshToken = jsonNode.get("refresh_token").asText();
-        int expiresIn = jsonNode.get("expires_in").asInt(3600);
-        this.expiryTime = LocalDateTime.now().plusSeconds(expiresIn - 300);
-        saveTokenToPreferences();
+        // this.accessToken = jsonNode.get("refresh_token").asText();
+        // this.refreshToken = jsonNode.get("refresh_token").asText();
+        // int expiresIn = jsonNode.get("expires_in").asInt(3600);
+        //this.expiryTime = LocalDateTime.now().plusSeconds(expiresIn - 300);
+        if (jsonNode.has("token")) {
+            this.accessToken = jsonNode.get("token").asText();
+            this.refreshToken = this.accessToken; // Nếu không có refresh_token riêng thì dùng luôn accessToken
+            this.expiryTime = LocalDateTime.now().plusHours(1); // Có thể đọc từ "exp" nếu có
+            saveTokenToPreferences();
+        } else {
+            System.err.println("No token found in token response: " + jsonNode.toPrettyString());
+        }
+        
     }
     
     public void logout() {
@@ -188,6 +196,8 @@ public class AuthService {
 
             if (response.statusCode() == 200) {
                 JsonNode jsonNode = objectMapper.readTree(response.body());
+                Map<String, Object> responseMap = parseJsonNode(jsonNode);
+                System.out.println("Parsed Response Map: " + responseMap);
                 if (jsonNode.has("token") || jsonNode.has("status")) {
                     this.accessToken = jsonNode.has("token") ? jsonNode.get("token").asText() : null;
                     this.refreshToken = this.accessToken;
@@ -218,4 +228,35 @@ public class AuthService {
     private boolean saveGoogleUserToDatabase(Userinfo userInfo) {
         return true;
     }
+    public Map<String, Object> parseApiResponse(String json) {
+    try {
+        JsonNode rootNode = objectMapper.readTree(json);
+        return parseJsonNode(rootNode);
+    } catch (IOException e) {
+        e.printStackTrace();
+        return new HashMap<>();
+    }
+}
+
+private Map<String, Object> parseJsonNode(JsonNode node) {
+    Map<String, Object> result = new HashMap<>();
+    node.fields().forEachRemaining(entry -> {
+        String key = entry.getKey();
+        JsonNode value = entry.getValue();
+        if (value.isObject()) {
+            result.put(key, parseJsonNode(value)); // đệ quy nếu là object lồng
+        } else if (value.isArray()) {
+            result.put(key, objectMapper.convertValue(value, Object[].class));
+        } else if (value.isTextual()) {
+            result.put(key, value.asText());
+        } else if (value.isNumber()) {
+            result.put(key, value.numberValue());
+        } else if (value.isBoolean()) {
+            result.put(key, value.asBoolean());
+        } else {
+            result.put(key, value.toString());
+        }
+    });
+    return result;
+}
 }

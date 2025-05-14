@@ -39,6 +39,45 @@ public class TaskPanel extends JPanel {
         
         // Create table model with column names for user data
         String[] columnNames = {"ID", "Email", "Full Name", "Role", "Status", "Created Date", "Updated Date", "Phone", "Address", "Birth Date", "Identity Number"};
+        
+        // Fetch data from the API and populate the table
+        SwingWorker<List<Task>, Void> worker = new SwingWorker<>() {
+            @Override
+            protected List<Task> doInBackground() {
+            return apiService.getUsers();
+            }
+
+            @Override
+            protected void done() {
+            try {
+                List<Task> users = get();
+                for (Task user : users) {
+                Object[] row = {
+                    user.getId(),
+                    user.getEmail(),
+                    user.getFullName(),
+                    user.getRole(),
+                    user.getStatus(),
+                    formatDateTime(user.getCreateDate()),
+                    formatDateTime(user.getUpdateDate()),
+                    user.getPhone(),
+                    user.getAddress(),
+                    formatDateTime(user.getBirthDate()),
+                    user.getIdentityNumber()
+                };
+                tableModel.addRow(row);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(TaskPanel.this, 
+                "Error loading users: " + e.getMessage(), 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+            }
+            }
+        };
+
+        worker.execute();
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
