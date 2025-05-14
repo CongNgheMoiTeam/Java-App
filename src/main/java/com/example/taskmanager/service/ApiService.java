@@ -3,7 +3,10 @@ package com.example.taskmanager.service;
 import com.example.taskmanager.config.ApiConfig;
 import com.example.taskmanager.model.Task;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 
 import java.io.IOException;
 import java.net.URI;
@@ -11,6 +14,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,10 +29,14 @@ public class ApiService {
         this.authService = authService;
         this.apiConfig = ApiConfig.getInstance();
         this.objectMapper = new ObjectMapper();
-        this.objectMapper.findAndRegisterModules();
-        this.httpClient = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofMillis(apiConfig.getConnectTimeout()))
-                .build();
+        // Cấu hình JavaTimeModule để parse LocalDateTime với định dạng của API
+    JavaTimeModule javaTimeModule = new JavaTimeModule();
+    javaTimeModule.addDeserializer(LocalDateTime.class, 
+        new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+    this.objectMapper.registerModule(javaTimeModule);
+    this.httpClient = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofMillis(apiConfig.getConnectTimeout()))
+            .build();
     }
 
 //    public List<Task> getUsers() {
@@ -54,29 +63,73 @@ public class ApiService {
 //        return Collections.emptyList();
 //    }
 
-    public List<Task> getUsers() {
+//    public List<Task> getUsers() {
+//    try {
+//        String uri = apiConfig.getApiBaseUrl() + "/get";
+//        HttpRequest request = HttpRequest.newBuilder()
+//                .uri(URI.create(uri))
+//                .header("Authorization", "Bearer " + authService.getAccessToken())
+//                .header("Content-Type", "application/x-www-form-urlencoded")
+//                .GET()
+//                .build();
+//
+//        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+//
+//        if (response.statusCode() == 200) {
+//            return objectMapper.readValue(
+//                    response.body(),
+//                    new TypeReference<List<Task>>() {});
+//        } else {
+//            System.err.println("Error fetching users: " + response.statusCode() + " - " + response.body());
+//        }
+//    } catch (IOException | InterruptedException e) {
+//        e.printStackTrace();
+//    }
+//        // Trả về danh sách chứa dữ liệu mẫu nếu API thất bại
+//    Task sampleTask = new Task();
+//    sampleTask.setId(1L);
+//    sampleTask.setEmail("sample@example.com");
+//    sampleTask.setFullName("Sample User");
+//    sampleTask.setRole("customer");
+//    sampleTask.setStatus("Active");
+//    sampleTask.setCreateDate(LocalDateTime.now());
+//    sampleTask.setUpdateDate(LocalDateTime.now());
+//    sampleTask.setPhone("1234567890");
+//    sampleTask.setAddress("123 Sample St");
+//    sampleTask.setBirthDate(LocalDateTime.now());
+//    sampleTask.setIdentityNumber("ID123456");
+//
+//    return Collections.singletonList(sampleTask);
+//}
+    public Task getUsers() { // Thay đổi kiểu trả về từ List<Task> thành Task
     try {
         String uri = apiConfig.getApiBaseUrl() + "/get";
+        System.out.println("Calling API: " + uri);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
                 .header("Authorization", "Bearer " + authService.getAccessToken())
-                .header("Content-Type", "application/x-www-form-urlencoded")
                 .GET()
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("API Response: " + response.statusCode() + " - " + response.body());
 
         if (response.statusCode() == 200) {
+            JsonNode rootNode = objectMapper.readTree(response.body());
+            if (rootNode.has("error")) {
+                System.err.println("API Error: " + rootNode.get("error").asText());
+                return null; // Hoặc trả về dữ liệu mẫu
+            }
             return objectMapper.readValue(
                     response.body(),
-                    new TypeReference<List<Task>>() {});
+                    Task.class); // Ánh xạ thành một đối tượng Task
         } else {
             System.err.println("Error fetching users: " + response.statusCode() + " - " + response.body());
         }
     } catch (IOException | InterruptedException e) {
         e.printStackTrace();
     }
-    return Collections.emptyList();
+    return null; // Hoặc trả về một Task mẫu
 }
     public Task createUser(Task user) {
         try {

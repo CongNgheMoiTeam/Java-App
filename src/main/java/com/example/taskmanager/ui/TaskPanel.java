@@ -7,8 +7,10 @@ import com.example.taskmanager.service.AuthService;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
@@ -106,102 +108,232 @@ public class TaskPanel extends JPanel {
         refreshUsers();
     }
     
+//    public void refreshUsers() {
+//        refreshButton.setEnabled(false);
+//        refreshButton.setText("Loading...");
+//        
+//        // Use SwingWorker to load users in background
+//        SwingWorker<List<Task>, Void> worker = new SwingWorker<>() {
+//            @Override
+//            protected List<Task> doInBackground() {
+//                return apiService.getUsers();
+//            }
+//            
+//            @Override
+//            protected void done() {
+//                try {
+//                    List<Task> users = get();
+//                    updateUserTable(users);
+//                    refreshButton.setEnabled(true);
+//                    refreshButton.setText("Refresh");
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    JOptionPane.showMessageDialog(TaskPanel.this, 
+//                        "Error loading users: " + e.getMessage(), 
+//                        "Error", 
+//                        JOptionPane.ERROR_MESSAGE);
+//                    refreshButton.setEnabled(true);
+//                    refreshButton.setText("Refresh");
+//                }
+//            }
+//        };
+//        
+//        worker.execute();
+//    }
+//    public void refreshUsers() {
+//    refreshButton.setEnabled(false);
+//    refreshButton.setText("Loading...");
+//    
+//    SwingWorker<Task, Void> worker = new SwingWorker<>() { // Thay List<Task> thành Task
+//        @Override
+//        protected Task doInBackground() {
+//            return apiService.getUsers();
+//        }
+//        
+//        @Override
+//        protected void done() {
+//            try {
+//                Task user = get(); // Nhận một Task thay vì List<Task>
+//                updateUserTable(user != null ? Collections.singletonList(user) : Collections.emptyList()); // Chuyển thành List<Task>
+//                refreshButton.setEnabled(true);
+//                refreshButton.setText("Refresh");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                JOptionPane.showMessageDialog(TaskPanel.this, 
+//                    "Error loading users: " + e.getMessage(), 
+//                    "Error", 
+//                    JOptionPane.ERROR_MESSAGE);
+//                refreshButton.setEnabled(true);
+//                refreshButton.setText("Refresh");
+//            }
+//        }
+//    };
+//    
+//    worker.execute();
+//}
     public void refreshUsers() {
-        refreshButton.setEnabled(false);
-        refreshButton.setText("Loading...");
-        
-        // Use SwingWorker to load users in background
-        SwingWorker<List<Task>, Void> worker = new SwingWorker<>() {
-            @Override
-            protected List<Task> doInBackground() {
-                return apiService.getUsers();
+    refreshButton.setEnabled(false);
+    refreshButton.setText("Loading...");
+
+    SwingWorker<Task, Void> worker = new SwingWorker<>() {
+        @Override
+        protected Task doInBackground() {
+            return apiService.getUsers();
+        }
+
+        @Override
+        protected void done() {
+            try {
+                Task user = get();
+                System.out.println("User fetched: " + (user != null ? user.getEmail() : "null"));
+                updateUserTable(user != null ? Collections.singletonList(user) : Collections.emptyList());
+                refreshButton.setEnabled(true);
+                refreshButton.setText("Refresh");
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(TaskPanel.this, 
+                    "Error loading users: " + e.getMessage(), 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+                refreshButton.setEnabled(true);
+                refreshButton.setText("Refresh");
             }
-            
-            @Override
-            protected void done() {
-                try {
-                    List<Task> users = get();
-                    updateUserTable(users);
-                    refreshButton.setEnabled(true);
-                    refreshButton.setText("Refresh");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    JOptionPane.showMessageDialog(TaskPanel.this, 
-                        "Error loading users: " + e.getMessage(), 
-                        "Error", 
-                        JOptionPane.ERROR_MESSAGE);
-                    refreshButton.setEnabled(true);
-                    refreshButton.setText("Refresh");
-                }
-            }
-        };
-        
-        worker.execute();
-    }
-    
+        }
+    };
+
+    worker.execute();
+}
+//    private void updateUserTable(List<Task> users) {
+//        // Clear existing data
+//        tableModel.setRowCount(0);
+//        
+//        // Add users to table
+//        for (Task user : users) {
+//            Vector<Object> row = new Vector<>();
+//            row.add(user.getId());
+//            row.add(user.getEmail());
+//            row.add(user.getFullName());
+//            row.add(user.getRole());
+//            row.add(user.getStatus());
+//            row.add(formatDateTime(user.getCreateDate()));
+//            row.add(formatDateTime(user.getUpdateDate()));
+//            row.add(user.getPhone());
+//            row.add(user.getAddress());
+//            row.add(formatDateTime(user.getBirthDate()));
+//            row.add(user.getIdentityNumber());
+//            tableModel.addRow(row);
+//        }
+//    }
     private void updateUserTable(List<Task> users) {
-        // Clear existing data
-        tableModel.setRowCount(0);
-        
-        // Add users to table
-        for (Task user : users) {
-            Vector<Object> row = new Vector<>();
-            row.add(user.getId());
-            row.add(user.getEmail());
-            row.add(user.getFullName());
-            row.add(user.getRole());
-            row.add(user.getStatus());
-            row.add(formatDateTime(user.getCreateDate()));
-            row.add(formatDateTime(user.getUpdateDate()));
-            row.add(user.getPhone());
-            row.add(user.getAddress());
-            row.add(formatDateTime(user.getBirthDate()));
-            row.add(user.getIdentityNumber());
-            tableModel.addRow(row);
-        }
+    tableModel.setRowCount(0);
+    System.out.println("Updating table with " + users.size() + " users");
+
+    for (Task user : users) {
+        Vector<Object> row = new Vector<>();
+        row.add(user.getId() != null ? user.getId() : "");
+        row.add(user.getEmail() != null ? user.getEmail() : "");
+        row.add(user.getFullName() != null ? user.getFullName() : "");
+        row.add(user.getRole() != null ? user.getRole() : "");
+        row.add(user.getStatus() != null ? user.getStatus() : "");
+        row.add(formatDateTime(user.getCreateDate()));
+        row.add(formatDateTime(user.getUpdateDate()));
+        row.add(user.getPhone() != null ? user.getPhone() : "");
+        row.add(user.getAddress() != null ? user.getAddress() : "");
+        row.add(formatDateTime(user.getBirthDate()));
+        row.add(user.getIdentityNumber() != null ? user.getIdentityNumber() : "");
+        tableModel.addRow(row);
     }
-    
-    private String formatDateTime(LocalDateTime dateTime) {
-        return dateTime != null ? dateTime.format(DATE_FORMATTER) : "";
+
+    userTable.repaint();
+    userTable.revalidate();
+}
+    private String formatDateTime(Object dateTime) {
+    if (dateTime == null) return "";
+    if (dateTime instanceof LocalDateTime) {
+        return ((LocalDateTime) dateTime).format(DATE_FORMATTER);
+    } else if (dateTime instanceof LocalDate) {
+        return ((LocalDate) dateTime).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
+    return "";
+}
     
+//    private Task getUserFromSelectedRow() {
+//        int selectedRow = userTable.getSelectedRow();
+//        if (selectedRow < 0) {
+//            return null;
+//        }
+//        
+//        Long id = (Long) tableModel.getValueAt(selectedRow, 0);
+//        String email = (String) tableModel.getValueAt(selectedRow, 1);
+//        String fullName = (String) tableModel.getValueAt(selectedRow, 2);
+//        String role = (String) tableModel.getValueAt(selectedRow, 3);
+//        String status = (String) tableModel.getValueAt(selectedRow, 4);
+//        LocalDateTime createDate = parseDateTime((String) tableModel.getValueAt(selectedRow, 5));
+//        LocalDateTime updateDate = parseDateTime((String) tableModel.getValueAt(selectedRow, 6));
+//        String phone = (String) tableModel.getValueAt(selectedRow, 7);
+//        String address = (String) tableModel.getValueAt(selectedRow, 8);
+//        LocalDateTime birthDate = parseDateTime((String) tableModel.getValueAt(selectedRow, 9));
+//        String identityNumber = (String) tableModel.getValueAt(selectedRow, 10);
+//        
+//        Task user = new Task();
+//        user.setId(id);
+//        user.setEmail(email);
+//        user.setFullName(fullName);
+//        user.setRole(role);
+//        user.setStatus(status);
+//        user.setCreateDate(createDate);
+//        user.setUpdateDate(updateDate);
+//        user.setPhone(phone);
+//        user.setAddress(address);
+//        user.setBirthDate(birthDate);
+//        user.setIdentityNumber(identityNumber);
+//        
+//        return user;
+//    }
     private Task getUserFromSelectedRow() {
-        int selectedRow = userTable.getSelectedRow();
-        if (selectedRow < 0) {
-            return null;
-        }
-        
-        Long id = (Long) tableModel.getValueAt(selectedRow, 0);
-        String email = (String) tableModel.getValueAt(selectedRow, 1);
-        String fullName = (String) tableModel.getValueAt(selectedRow, 2);
-        String role = (String) tableModel.getValueAt(selectedRow, 3);
-        String status = (String) tableModel.getValueAt(selectedRow, 4);
-        LocalDateTime createDate = parseDateTime((String) tableModel.getValueAt(selectedRow, 5));
-        LocalDateTime updateDate = parseDateTime((String) tableModel.getValueAt(selectedRow, 6));
-        String phone = (String) tableModel.getValueAt(selectedRow, 7);
-        String address = (String) tableModel.getValueAt(selectedRow, 8);
-        LocalDateTime birthDate = parseDateTime((String) tableModel.getValueAt(selectedRow, 9));
-        String identityNumber = (String) tableModel.getValueAt(selectedRow, 10);
-        
-        Task user = new Task();
-        user.setId(id);
-        user.setEmail(email);
-        user.setFullName(fullName);
-        user.setRole(role);
-        user.setStatus(status);
-        user.setCreateDate(createDate);
-        user.setUpdateDate(updateDate);
-        user.setPhone(phone);
-        user.setAddress(address);
-        user.setBirthDate(birthDate);
-        user.setIdentityNumber(identityNumber);
-        
-        return user;
+    int selectedRow = userTable.getSelectedRow();
+    if (selectedRow < 0) {
+        return null;
     }
-    
-    private LocalDateTime parseDateTime(String dateTimeStr) {
-        return dateTimeStr != null && !dateTimeStr.isEmpty() ? LocalDateTime.parse(dateTimeStr, DATE_FORMATTER) : null;
+
+    Long id = (Long) tableModel.getValueAt(selectedRow, 0);
+    String email = (String) tableModel.getValueAt(selectedRow, 1);
+    String fullName = (String) tableModel.getValueAt(selectedRow, 2);
+    String role = (String) tableModel.getValueAt(selectedRow, 3);
+    String status = (String) tableModel.getValueAt(selectedRow, 4);
+    LocalDateTime createDate = parseDateTime((String) tableModel.getValueAt(selectedRow, 5)) instanceof LocalDateTime 
+        ? (LocalDateTime) parseDateTime((String) tableModel.getValueAt(selectedRow, 5)) : null;
+    LocalDateTime updateDate = parseDateTime((String) tableModel.getValueAt(selectedRow, 6)) instanceof LocalDateTime 
+        ? (LocalDateTime) parseDateTime((String) tableModel.getValueAt(selectedRow, 6)) : null;
+    String phone = (String) tableModel.getValueAt(selectedRow, 7);
+    String address = (String) tableModel.getValueAt(selectedRow, 8);
+    LocalDate birthDate = parseDateTime((String) tableModel.getValueAt(selectedRow, 9)) instanceof LocalDate 
+        ? (LocalDate) parseDateTime((String) tableModel.getValueAt(selectedRow, 9)) : null;
+    String identityNumber = (String) tableModel.getValueAt(selectedRow, 10);
+
+    Task user = new Task();
+    user.setId(id);
+    user.setEmail(email);
+    user.setFullName(fullName);
+    user.setRole(role);
+    user.setStatus(status);
+    user.setCreateDate(createDate);
+    user.setUpdateDate(updateDate);
+    user.setPhone(phone);
+    user.setAddress(address);
+    user.setBirthDate(birthDate); // Sử dụng LocalDate
+    user.setIdentityNumber(identityNumber);
+
+    return user;
+}
+    private Object parseDateTime(String dateTimeStr) {
+    if (dateTimeStr == null || dateTimeStr.isEmpty()) return null;
+    try {
+        return LocalDateTime.parse(dateTimeStr, DATE_FORMATTER); // Thử parse với định dạng đầy đủ
+    } catch (Exception e) {
+        return LocalDate.parse(dateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd")); // Thử parse với định dạng ngày
     }
+}
     
     private void showAddUserDialog() {
         JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(this), "Add New User", Dialog.ModalityType.APPLICATION_MODAL);
@@ -241,38 +373,39 @@ public class TaskPanel extends JPanel {
         JButton cancelButton = new JButton("Cancel");
         
         saveButton.addActionListener(e -> {
-            String email = emailField.getText().trim();
-            String fullName = fullNameField.getText().trim();
-            String role = roleField.getText().trim();
-            String status = statusField.getText().trim();
-            String phone = phoneField.getText().trim();
-            String address = addressField.getText().trim();
-            LocalDateTime birthDate = parseDateTime(birthDateField.getText().trim());
-            String identityNumber = identityNumberField.getText().trim();
-            
-            if (email.isEmpty() || fullName.isEmpty()) {
-                JOptionPane.showMessageDialog(dialog, 
-                    "Email and Full Name are required", 
-                    "Input Error", 
-                    JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-            Task newUser = new Task();
-            newUser.setEmail(email);
-            newUser.setFullName(fullName);
-            newUser.setRole(role);
-            newUser.setStatus(status);
-            newUser.setPhone(phone);
-            newUser.setAddress(address);
-            newUser.setBirthDate(birthDate);
-            newUser.setIdentityNumber(identityNumber);
-            newUser.setCreateDate(LocalDateTime.now());
-            newUser.setUpdateDate(LocalDateTime.now());
-            
-            createUser(newUser);
-            dialog.dispose();
-        });
+    String email = emailField.getText().trim();
+    String fullName = fullNameField.getText().trim();
+    String role = roleField.getText().trim();
+    String status = statusField.getText().trim();
+    String phone = phoneField.getText().trim();
+    String address = addressField.getText().trim();
+    Object birthDateObj = parseDateTime(birthDateField.getText().trim());
+    LocalDate birthDate = birthDateObj instanceof LocalDate ? (LocalDate) birthDateObj : null;
+    String identityNumber = identityNumberField.getText().trim();
+
+    if (email.isEmpty() || fullName.isEmpty()) {
+        JOptionPane.showMessageDialog(dialog, 
+            "Email and Full Name are required", 
+            "Input Error", 
+            JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    Task newUser = new Task();
+    newUser.setEmail(email);
+    newUser.setFullName(fullName);
+    newUser.setRole(role);
+    newUser.setStatus(status);
+    newUser.setPhone(phone);
+    newUser.setAddress(address);
+    newUser.setBirthDate(birthDate);
+    newUser.setIdentityNumber(identityNumber);
+    newUser.setCreateDate(LocalDateTime.now());
+    newUser.setUpdateDate(LocalDateTime.now());
+
+    createUser(newUser);
+    dialog.dispose();
+});
         
         cancelButton.addActionListener(e -> dialog.dispose());
         
@@ -341,36 +474,37 @@ public class TaskPanel extends JPanel {
         JButton cancelButton = new JButton("Cancel");
         
         saveButton.addActionListener(e -> {
-            String email = emailField.getText().trim();
-            String fullName = fullNameField.getText().trim();
-            String role = roleField.getText().trim();
-            String status = statusField.getText().trim();
-            String phone = phoneField.getText().trim();
-            String address = addressField.getText().trim();
-            LocalDateTime birthDate = parseDateTime(birthDateField.getText().trim());
-            String identityNumber = identityNumberField.getText().trim();
-            
-            if (email.isEmpty() || fullName.isEmpty()) {
-                JOptionPane.showMessageDialog(dialog, 
-                    "Email and Full Name are required", 
-                    "Input Error", 
-                    JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-            user.setEmail(email);
-            user.setFullName(fullName);
-            user.setRole(role);
-            user.setStatus(status);
-            user.setPhone(phone);
-            user.setAddress(address);
-            user.setBirthDate(birthDate);
-            user.setIdentityNumber(identityNumber);
-            user.setUpdateDate(LocalDateTime.now());
-            
-            updateUser(user);
-            dialog.dispose();
-        });
+    String email = emailField.getText().trim();
+    String fullName = fullNameField.getText().trim();
+    String role = roleField.getText().trim();
+    String status = statusField.getText().trim();
+    String phone = phoneField.getText().trim();
+    String address = addressField.getText().trim();
+    Object birthDateObj = parseDateTime(birthDateField.getText().trim());
+    LocalDate birthDate = birthDateObj instanceof LocalDate ? (LocalDate) birthDateObj : null;
+    String identityNumber = identityNumberField.getText().trim();
+
+    if (email.isEmpty() || fullName.isEmpty()) {
+        JOptionPane.showMessageDialog(dialog, 
+            "Email and Full Name are required", 
+            "Input Error", 
+            JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    user.setEmail(email);
+    user.setFullName(fullName);
+    user.setRole(role);
+    user.setStatus(status);
+    user.setPhone(phone);
+    user.setAddress(address);
+    user.setBirthDate(birthDate);
+    user.setIdentityNumber(identityNumber);
+    user.setUpdateDate(LocalDateTime.now());
+
+    updateUser(user);
+    dialog.dispose();
+});
         
         cancelButton.addActionListener(e -> dialog.dispose());
         

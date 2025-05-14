@@ -81,7 +81,7 @@ public class GoogleLoginHelper {
         Credential credential = new AuthorizationCodeInstalledApp(flow, receiver) {
             @Override
             protected void onAuthorization(com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl authorizationUrl) throws IOException {
-                authorizationUrl.set("prompt", "select_account"); // Force account chooser
+                authorizationUrl.set("prompt", "consent select_account"); // Force account chooser
                 System.out.println("Authorization URL: " + authorizationUrl.build());
                 super.onAuthorization(authorizationUrl);
             }

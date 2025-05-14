@@ -25,7 +25,6 @@ com\example\taskmanager\ui\TaskPanel.class
 com\example\taskmanager\ui\LoginPanel.class
 com\example\taskmanager\ui\MainWindow$5.class
 com\example\taskmanager\ui\TaskPanel$4.class
-com\example\taskmanager\service\ApiService$1.class
 com\example\taskmanager\service\AuthService.class
 com\example\taskmanager\ui\TaskPanel$1.class
 com\example\taskmanager\ui\LoginPanel$1.class
