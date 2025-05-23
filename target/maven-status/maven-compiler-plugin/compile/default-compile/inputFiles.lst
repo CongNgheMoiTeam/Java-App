@@ -1,16 +1,16 @@
-C:\Users\PC\OneDrive - Industrial University of HoChiMinh City\Documents\NetBeansProjects\TaskManagerApp\src\main\java\com\example\taskmanager\App.java
-C:\Users\PC\OneDrive - Industrial University of HoChiMinh City\Documents\NetBeansProjects\TaskManagerApp\src\main\java\com\example\taskmanager\auth\GoogleLoginHelper.java
-C:\Users\PC\OneDrive - Industrial University of HoChiMinh City\Documents\NetBeansProjects\TaskManagerApp\src\main\java\com\example\taskmanager\config\ApiConfig.java
-C:\Users\PC\OneDrive - Industrial University of HoChiMinh City\Documents\NetBeansProjects\TaskManagerApp\src\main\java\com\example\taskmanager\config\DatabaseConfig.java
-C:\Users\PC\OneDrive - Industrial University of HoChiMinh City\Documents\NetBeansProjects\TaskManagerApp\src\main\java\com\example\taskmanager\model\Task.java
-C:\Users\PC\OneDrive - Industrial University of HoChiMinh City\Documents\NetBeansProjects\TaskManagerApp\src\main\java\com\example\taskmanager\security\EncryptionUtil.java
-C:\Users\PC\OneDrive - Industrial University of HoChiMinh City\Documents\NetBeansProjects\TaskManagerApp\src\main\java\com\example\taskmanager\security\JwtUtil.java
-C:\Users\PC\OneDrive - Industrial University of HoChiMinh City\Documents\NetBeansProjects\TaskManagerApp\src\main\java\com\example\taskmanager\service\ApiService.java
-C:\Users\PC\OneDrive - Industrial University of HoChiMinh City\Documents\NetBeansProjects\TaskManagerApp\src\main\java\com\example\taskmanager\service\AuthService.java
-C:\Users\PC\OneDrive - Industrial University of HoChiMinh City\Documents\NetBeansProjects\TaskManagerApp\src\main\java\com\example\taskmanager\TaskManagerApp.java
-C:\Users\PC\OneDrive - Industrial University of HoChiMinh City\Documents\NetBeansProjects\TaskManagerApp\src\main\java\com\example\taskmanager\ui\e.java
-C:\Users\PC\OneDrive - Industrial University of HoChiMinh City\Documents\NetBeansProjects\TaskManagerApp\src\main\java\com\example\taskmanager\ui\LoginPanel.java
-C:\Users\PC\OneDrive - Industrial University of HoChiMinh City\Documents\NetBeansProjects\TaskManagerApp\src\main\java\com\example\taskmanager\ui\MainWindow.java
-C:\Users\PC\OneDrive - Industrial University of HoChiMinh City\Documents\NetBeansProjects\TaskManagerApp\src\main\java\com\example\taskmanager\ui\TaskPanel.java
-C:\Users\PC\OneDrive - Industrial University of HoChiMinh City\Documents\NetBeansProjects\TaskManagerApp\src\main\java\com\google\api\client\extensions\jetty\auth\oauth2\AuthorizationCodeInstalledApp.java
-C:\Users\PC\OneDrive - Industrial University of HoChiMinh City\Documents\NetBeansProjects\TaskManagerApp\src\main\java\com\google\api\services\oauth2\model\Userinfoplus.java
+C:\xampp\htdocs\Java-App\src\main\java\com\example\taskmanager\App.java
+C:\xampp\htdocs\Java-App\src\main\java\com\example\taskmanager\auth\GoogleLoginHelper.java
+C:\xampp\htdocs\Java-App\src\main\java\com\example\taskmanager\config\ApiConfig.java
+C:\xampp\htdocs\Java-App\src\main\java\com\example\taskmanager\config\DatabaseConfig.java
+C:\xampp\htdocs\Java-App\src\main\java\com\example\taskmanager\model\Task.java
+C:\xampp\htdocs\Java-App\src\main\java\com\example\taskmanager\security\EncryptionUtil.java
+C:\xampp\htdocs\Java-App\src\main\java\com\example\taskmanager\security\JwtUtil.java
+C:\xampp\htdocs\Java-App\src\main\java\com\example\taskmanager\service\ApiService.java
+C:\xampp\htdocs\Java-App\src\main\java\com\example\taskmanager\service\AuthService.java
+C:\xampp\htdocs\Java-App\src\main\java\com\example\taskmanager\TaskManagerApp.java
+C:\xampp\htdocs\Java-App\src\main\java\com\example\taskmanager\ui\e.java
+C:\xampp\htdocs\Java-App\src\main\java\com\example\taskmanager\ui\LoginPanel.java
+C:\xampp\htdocs\Java-App\src\main\java\com\example\taskmanager\ui\MainWindow.java
+C:\xampp\htdocs\Java-App\src\main\java\com\example\taskmanager\ui\TaskPanel.java
+C:\xampp\htdocs\Java-App\src\main\java\com\google\api\client\extensions\jetty\auth\oauth2\AuthorizationCodeInstalledApp.java
+C:\xampp\htdocs\Java-App\src\main\java\com\google\api\services\oauth2\model\Userinfoplus.java

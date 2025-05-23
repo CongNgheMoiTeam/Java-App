@@ -4,17 +4,18 @@
  */
 package com.example.taskmanager.security;
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Base64;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
 public class EncryptionUtil {
     private static final String ALGORITHM = "AES";
-    private static final String SECRET_KEY = "TaskManagerSecretKey";
+    private static final String SECRET_KEY = "MeoMeoMeoGauGauGau240!ecec";
 
     private static SecretKey getSecretKey() throws Exception {
         MessageDigest sha = MessageDigest.getInstance("SHA-256");

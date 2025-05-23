@@ -21,7 +21,7 @@ public class MainWindow extends JFrame {
     private static final Color TEXT_COLOR = new Color(71, 85, 105);
     private static Font MAIN_FONT = new Font("Segoe UI", Font.PLAIN, 14);
     private static Font WELCOME_FONT = new Font("Segoe UI", Font.BOLD, 24);
-    private static final String WEB_APP_URL = "http://localhost:8080/customer"; // URL của ứng dụng web
+    private static final String WEB_APP_URL = "http://localhost:80/customer"; // URL của ứng dụng web
     
     // Lưu trữ font size gốc
     private static final int MAIN_FONT_SIZE = 14;
